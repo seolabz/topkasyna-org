@@ -6,8 +6,8 @@ hero_subtitle: "Лучшие онлайн-платформы для ставок
 hero_button_text: "ТОП казино дня!"  
 hero_button_link: "#starda"  
 banner_image: "/images/banner.webp"
-date: 2025-09-18
-lastmod: 2025-09-18
+date: 2025-12-23
+lastmod: 2025-12-23
 draft: false
 layout: "index"
 canonical: "https://socialmediacontent.pl/"

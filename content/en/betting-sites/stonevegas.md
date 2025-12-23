@@ -25,8 +25,8 @@ category: "Sports Betting & Online Casino"
 canonical: "https://socialmediacontent.pl/stonevegas/"  
 
 banner_image: "/images/banner.webp"
-date: 2025-09-18
-lastmod: 2025-09-18
+date: 2025-12-23
+lastmod: 2025-12-23
 draft: false
 layout: "single"
 
