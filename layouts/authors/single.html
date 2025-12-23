@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.LanguageCode }}">
+<head>
+  <meta charset="UTF-8">
+ <title>{{ .Title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+  <!-- Multilingual support -->
+  {{ range .AllTranslations }}
+  <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
+  {{ end }}
+  {{ range .Site.Languages }}
+    {{ if ne .Lang $.Site.Language.Lang }}
+      {{ $alt := first 1 (where $.Translations "Lang" .Lang) }}
+      {{ if gt (len $alt) 0 }}
+        <link rel="alternate" hreflang="{{ .Lang }}" href="{{ (index $alt 0).RelPermalink }}">
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+  
+  <!-- SEO Meta Tags -->
+  {{ with .Params.description }}
+    <meta name="description" content="{{ . }}">
+  {{ else }}
+    <meta name="description" content="{{ .Summary }}">
+  {{ end }}
+  {{ with .Params.keywords }}
+    <meta name="keywords" content="{{ delimit . ", " }}">
+  {{ end }}
+  {{ with .Params.canonical }}
+    <link rel="canonical" href="{{ . }}">
+  {{ end }}
+  
+  <!-- Favicon -->
+  {{ with .Site.Params.favicon }}
+    <link rel="icon" href="{{ . | relURL }}" type="image/png">
+  {{ end }}
+  
+  <!-- Schema.org JSON-LD for Author -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "{{ .Title }}",
+    {{ with .Params.avatar }}"image": "{{ . | absURL }}",{{ end }}
+    {{ with .Params.description }}"description": "{{ . }}",{{ end }}
+    "url": "{{ .Permalink }}",
+    "datePublished": "{{ .Date.Format "2006-01-02" }}",
+    "dateModified": "{{ .Lastmod.Format "2006-01-02" }}",
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ .Site.Title }}",
+      {{ with .Site.Params.organization.logo }}"logo": {
+        "@type": "ImageObject",
+        "url": "{{ . }}"
+      }{{ end }}
+    }
+  }
+  </script>
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+  {{ with .Params.description }}
+    <meta property="og:description" content="{{ . }}">
+  {{ else }}
+    <meta property="og:description" content="{{ .Summary }}">
+  {{ end }}
+  {{ with .Params.avatar }}
+    <meta property="og:image" content="{{ . | absURL }}">
+  {{ end }}
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:locale" content="{{ .Site.Language.Lang }}">
+  <meta property="profile:first_name" content="{{ .Title }}">
+  
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ .Title }}">
+  {{ with .Params.description }}
+    <meta name="twitter:description" content="{{ . }}">
+  {{ else }}
+    <meta name="twitter:description" content="{{ .Summary }}">
+  {{ end }}
+  {{ with .Params.avatar }}
+    <meta name="twitter:image" content="{{ . | absURL }}">
+  {{ end }}
+  {{ with .Site.Params.social.twitter }}
+    <meta name="twitter:site" content="@{{ . }}">
+  {{ end }}
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Trust/Verification tags -->
+  {{ with .Site.Params.verification.trustpilot }}
+  <meta name="trustpilot-one-time-domain-verification-id" content="{{ . }}"/>
+  {{ end }}
+  {{ with .Site.Params.verification.google }}
+  <meta name="google-site-verification" content="{{ . }}" />
+  {{ end }}
+</head>
+<body>
+
+<!-- Header -->
+<header class="topbar">
+  <div class="topbar-left">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}">
+    </div>
+  </div>
+  
+  <!-- Desktop navigation menu -->
+  <nav class="main-nav">
+    {{ range .Site.Menus.main }}
+      {{ if .HasChildren }}
+        <div class="dropdown">
+          <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }} class="dropbtn">{{ .Name }}</a>
+          <div class="dropdown-content">
+            {{ range .Children }}
+              <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+            {{ end }}
+          </div>
+        </div>
+      {{ else }}
+        <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+      {{ end }}
+    {{ end }}
+  </nav>
+  
+  <div class="topbar-right">
+    <!-- Language switcher -->
+    <!-- <div class="language-switcher">
+      <div class="lang-current">
+        <img src="/flags/{{ .Site.Language.Lang }}.png" alt="{{ .Site.Language.LanguageName }}" class="flag-icon">
+        {{ .Site.Language.LanguageName }}
+        <div class="lang-dropdown">
+          {{ range .Site.Languages }}
+            {{ if ne .Lang $.Site.Language.Lang }}
+              {{ $alt := first 1 (where $.Translations "Lang" .Lang) }}
+              {{ if gt (len $alt) 0 }}
+                <a href="{{ (index $alt 0).RelPermalink }}" class="lang-option">
+                  <img src="/flags/{{ .Lang }}.png" alt="{{ .LanguageName }}" class="flag-icon">
+                  {{ .LanguageName }}
+                </a>
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </div>
+      </div>
+    </div> -->
+    
+    <!-- Header buttons -->
+    {{ range .Site.Menus.header }}
+      <a href="{{ .URL }}" class="{{ .Params.class }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+    {{ end }}
+  </div>
+</header>
+
+<!-- Mobile Navigation -->
+<div class="mobile-nav">
+  <div class="mobile-header">
+    <div class="mobile-logo">
+      <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}">
+    </div>
+    <button class="mobile-menu-toggle" aria-label="{{ .Site.Params.ui.open_menu | default "Open menu" }}">☰</button>
+  </div>
+
+  <div class="mobile-menu">
+    {{ range .Site.Menus.main }}
+      {{ if .HasChildren }}
+        <div class="mobile-dropdown">
+          <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }} class="mobile-dropbtn">{{ .Name }}</a>
+          <div class="mobile-dropdown-content">
+            {{ range .Children }}
+              <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+            {{ end }}
+          </div>
+        </div>
+      {{ else }}
+        <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+      {{ end }}
+    {{ end }}
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Breadcrumbs Section -->
+  <section class="breadcrumbs-section">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="{{ .Site.Params.ui.breadcrumb_nav | default "Breadcrumb navigation" }}">
+        <ol class="breadcrumb-list">
+          <li class="breadcrumb-item">
+            <a href="{{ .Site.Home.RelPermalink }}">
+              <span class="breadcrumb-icon">🏠</span>
+              {{ .Site.Params.ui.home | default "Home" }}
+            </a>
+          </li>
+          <li class="breadcrumb-separator">›</li>
+          <li class="breadcrumb-item current" aria-current="page">
+            <span>{{ .Title }}</span>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Author Profile Section -->
+  <article class="author-page">
+    <div class="container">
+      <!-- Author Profile -->
+      <section class="author-profile">
+        <div>
+          {{ with .Params.avatar }}
+            <img src="{{ . | relURL }}" alt="{{ $.Title }}" class="author-avatar-large">
+          {{ end }}
+        </div>
+        <div>
+          <h1 class="author-title">{{ .Title }}</h1>
+          {{ with .Params.description }}
+            <p class="author-bio">{{ . }}</p>
+          {{ end }}
+        </div>
+      </section>
+
+      <!-- Author Content -->
+      {{ if .Content }}
+      <section class="content-section">
+        {{ .Content }}
+      </section>
+      {{ end }}
+
+      <!-- Author's Posts -->
+      {{ $authorPosts := where .Site.RegularPages "Params.author" .File.TranslationBaseName }}
+      {{ if gt (len $authorPosts) 0 }}
+      <section class="author-posts">
+        <h2>{{ .Site.Params.ui.author_posts | default "Author's Posts" }}</h2>
+        <div class="posts-grid">
+          {{ range first 6 $authorPosts }}
+            <div class="author-post-card">
+              <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+              {{ if .Params.description }}
+                <p>{{ .Params.description }}</p>
+              {{ else }}
+                <p>{{ .Summary | truncate 60 }}</p>
+              {{ end }}
+            </div>
+          {{ end }}
+        </div>
+      </section>
+      {{ end }}
+    </div>
+  </article>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <!-- Trust widgets -->
+  {{ if .Site.Params.trust.trustpilot }}
+  <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+  {{ end }}
+  
+  <div class="footer-container">
+    <div class="footer-content">
+      <!-- Branding -->
+      <div class="footer-brand">
+        {{ if .Site.Params.organization.logo }}
+          <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}" class="footer-logo">
+        {{ end }}
+        {{ if .Site.Params.organization.description }}
+          <p class="footer-description">{{ .Site.Params.organization.description }}</p>
+        {{ end }}
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-column">
+        <h4>{{ .Site.Params.footer.quick_links_title | default "Quick Links" }}</h4>
+        <ul>
+          {{ range .Site.Menus.footer_quick }}
+            <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <!-- Legal Links -->
+      <div class="footer-column">
+        <h4>{{ .Site.Params.footer.legal_title | default "Legal" }}</h4>
+        <ul>
+          {{ range .Site.Menus.footer_legal }}
+            <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      {{ if .Site.Params.contact }}
+      <div class="footer-column footer-contact">
+        <h4>{{ .Site.Params.footer.contact_title | default "Contact" }}</h4>
+        {{ if .Site.Params.contact.email }}
+          <p><a href="mailto:{{ .Site.Params.contact.email }}">{{ .Site.Params.contact.email }}</a></p>
+        {{ end }}
+        {{ if .Site.Params.contact.address }}
+          <p>{{ .Site.Params.contact.address }}</p>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        {{ if .Site.Params.organization.logo }}
+          <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}" class="footer-bottom-logo">
+        {{ end }}
+        <p class="footer-copyright">
+          © {{ now.Format "2006" }} {{ .Site.Title }}. {{ .Site.Params.footer.copyright_text | default "All rights reserved." }}
+        </p>
+      </div>
+      
+      <!-- Disclaimer -->
+      {{ if .Site.Params.footer.disclaimer }}
+        <p class="footer-disclaimer">{{ .Site.Params.footer.disclaimer }}</p>
+      {{ end }}
+      
+      <!-- Age verification -->
+      {{ if .Site.Params.footer.age_verification }}
+        <div class="age-verification">{{ .Site.Params.footer.age_verification }}</div>
+      {{ end }}
+    </div>
+  </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+  // Language switcher
+  document.addEventListener("DOMContentLoaded", function () {
+    const switcher = document.querySelector(".language-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("click", function (e) {
+        e.stopPropagation();
+        this.classList.toggle("active");
+      });
+
+      document.addEventListener("click", function () {
+        switcher.classList.remove("active");
+      });
+    }
+  });
+
+  // Mobile menu toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    const menu = document.querySelector('.mobile-menu');
+    
+    if (toggle && menu) {
+      toggle.addEventListener('click', function() {
+        menu.classList.toggle('active');
+      });
+    }
+    
+    // Mobile dropdown toggle
+    const mobileDropdowns = document.querySelectorAll('.mobile-dropdown');
+    mobileDropdowns.forEach(function(dropdown) {
+      const dropbtn = dropdown.querySelector('.mobile-dropbtn');
+      if (dropbtn) {
+        dropbtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          dropdown.classList.toggle('active');
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

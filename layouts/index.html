@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.LanguageCode }}">
+<head>
+  <meta charset="UTF-8">
+ <title>{{ .Title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+  <!-- Multilingual support -->
+  {{ range .AllTranslations }}
+  <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
+  {{ end }}
+  {{ range .Site.Languages }}
+    {{ if ne .Lang $.Site.Language.Lang }}
+      {{ $translation := $.GetPage (printf "/%s" .Lang) }}
+      {{ if $translation }}
+        <link rel="alternate" hreflang="{{ .Lang }}" href="{{ $translation.Permalink }}">
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+  
+  <!-- SEO Meta Tags -->
+  {{ with .Params.description }}
+    <meta name="description" content="{{ . }}">
+  {{ end }}
+  {{ with .Params.keywords }}
+    <meta name="keywords" content="{{ delimit . ", " }}">
+  {{ end }}
+  {{ with .Params.canonical }}
+    <link rel="canonical" href="{{ . }}">
+  {{ end }}
+  
+  <!-- Favicon -->
+  {{ with .Site.Params.favicon }}
+    <link rel="icon" href="{{ . | relURL }}" type="image/png">
+  {{ end }}
+  
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ .Title }}",
+    {{ with .Params.description }}"description": "{{ . }}",{{ end }}
+    {{ with .Params.banner_image }}"image": "{{ . }}",{{ end }}
+    "datePublished": "{{ .Date.Format "2006-01-02" }}",
+    "dateModified": "{{ .Lastmod.Format "2006-01-02" }}",
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ .Site.Title }}",
+      {{ with .Site.Params.organization.logo }}"logo": {
+        "@type": "ImageObject",
+        "url": "{{ . }}"
+      },{{ end }}
+      {{ with .Site.Params.organization.url }}"url": "{{ . }}"{{ end }}
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "name": "{{ .Site.Params.reviews.list_title | default "Top Casino Reviews" }}",
+      "description": "{{ .Site.Params.reviews.list_description | default "Comprehensive reviews of top online casinos" }}"
+    }
+  }
+  </script>
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+  {{ with .Params.description }}
+    <meta property="og:description" content="{{ . }}">
+  {{ end }}
+  {{ with .Params.banner_image }}
+    <meta property="og:image" content="{{ . | absURL }}">
+  {{ end }}
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:locale" content="{{ .Site.Language.Lang }}">
+  
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Title }}">
+  {{ with .Params.description }}
+    <meta name="twitter:description" content="{{ . }}">
+  {{ end }}
+  {{ with .Params.banner_image }}
+    <meta name="twitter:image" content="{{ . | absURL }}">
+  {{ end }}
+  {{ with .Site.Params.social.twitter }}
+    <meta name="twitter:site" content="@{{ . }}">
+  {{ end }}
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Trust/Verification tags -->
+  {{ with .Site.Params.verification.trustpilot }}
+  <meta name="trustpilot-one-time-domain-verification-id" content="{{ . }}"/>
+  {{ end }}
+  {{ with .Site.Params.verification.google }}
+  <meta name="google-site-verification" content="{{ . }}" />
+  {{ end }}
+</head>
+<body>
+
+<!-- Header -->
+<header class="topbar">
+  <div class="topbar-left">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}">
+    </div>
+  </div>
+  
+  <!-- Desktop navigation menu -->
+  <nav class="main-nav">
+    {{ range .Site.Menus.main }}
+      <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+    {{ end }}
+  </nav>
+  
+  <div class="topbar-right">
+    <!-- Language switcher
+    <div class="language-switcher">
+      <div class="lang-current">
+        <img src="/flags/{{ .Site.Language.Lang }}.png" alt="{{ .Site.Language.LanguageName }}" class="flag-icon">
+        {{ .Site.Language.LanguageName }}
+        <div class="lang-dropdown">
+          {{ range .Site.Languages }}
+            {{ if ne .Lang $.Site.Language.Lang }}
+              {{ $alt := first 1 (where $.Translations "Lang" .Lang) }}
+              {{ if gt (len $alt) 0 }}
+                <a href="{{ (index $alt 0).RelPermalink }}" class="lang-option">
+                  <img src="/flags/{{ .Lang }}.png" alt="{{ .LanguageName }}" class="flag-icon">
+                  {{ .LanguageName }}
+                </a>
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </div>
+      </div>
+    </div> -->
+    
+    <!-- Header buttons -->
+    {{ range .Site.Menus.header }}
+      <a href="{{ .URL }}" class="{{ .Params.class }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+    {{ end }}
+  </div>
+</header>
+
+<!-- Mobile Navigation -->
+<div class="mobile-nav">
+  <div class="mobile-header">
+    <div class="mobile-logo">
+      <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}">
+    </div>
+    <button class="mobile-menu-toggle" aria-label="{{ .Site.Params.ui.open_menu | default "Open menu" }}">☰</button>
+  </div>
+
+  <div class="mobile-menu">
+    {{ range .Site.Menus.main }}
+      <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+    {{ end }}
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    {{ with .Params.banner_image }}
+      <div class="hero-bg" style="background-image: url('{{ . }}');"></div>
+    {{ end }}
+    <div class="hero-content">
+      <h1 class="hero-title">{{ .Params.hero_title | default .Title }}</h1>
+      {{ with .Params.hero_subtitle }}
+        <p class="hero-subtitle">{{ . }}</p>
+      {{ end }}
+      {{ if .Params.hero_button_link }}
+        <a href="{{ .Params.hero_button_link }}" class="hero-btn" data-secure-link>
+          {{ .Params.hero_button_text | default (.Site.Params.ui.learn_more | default "Learn More") }}
+        </a>
+      {{ end }}
+    </div>
+  </section>
+
+  <!-- Casino Reviews Section -->
+  <section class="casino-reviews-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">{{ .Site.Params.reviews.section_title | default "Top Casino Reviews" }}</h2>
+        {{ with .Site.Params.reviews.section_description }}
+          <p class="section-description">{{ . }}</p>
+        {{ end }}
+      </div>
+
+      <!-- Casino Cards Grid -->
+      <div class="casino-grid" id="1">
+        {{ $currentLang := .Site.Language.Lang }}
+        {{ $casinos := where .Site.AllPages "Section" "betting-sites" }}
+        {{ $featuredCasinos := where $casinos "Params.featured" true }}
+        {{ $filteredCasinos := where $featuredCasinos "Lang" $currentLang }}
+        {{ $casinosWithPosition := where $filteredCasinos "Params.listing_position" "!=" nil }}
+        {{ $casinosWithoutPosition := where $filteredCasinos "Params.listing_position" "==" nil }}
+        {{ $sortedCasinosWithPosition := sort $casinosWithPosition "Params.listing_position" "asc" }}
+        {{ $finalCasinoList := $sortedCasinosWithPosition | append $casinosWithoutPosition }}
+        {{ range $finalCasinoList }}
+          {{ if .Params.featured }}
+            <article class="casino-card {{ if .Params.exclusive }}exclusive{{ end }}">
+                
+                <div class="casino-logo">
+                {{ with .Params.casino_logo }}
+                  <img src="{{ . }}" alt="{{ $.Title }} {{ $.Site.Params.ui.logo | default "logo" }}">
+                {{ end }}
+                
+                {{ if .Params.exclusive }}
+                  <div class="exclusive-badge">{{ $.Site.Params.ui.exclusive | default "EXCLUSIVE" }}</div>
+                {{ end }}
+                
+                {{ if .Params.listing_position }}
+                  <div class="listing-position-badge {{ if eq .Params.listing_position 1 }}top-position{{ else if eq .Params.listing_position 2 }}second-position{{ else if eq .Params.listing_position 3 }}third-position{{ end }}">
+                    {{ if eq .Params.listing_position 1 }}
+                      BEST
+                    {{ else }}
+                      {{ .Params.listing_position }}
+                    {{ end }}
+                  </div>
+                {{ end }}
+              </div>
+
+              
+              <div class="casino-info">
+              <h3 class="casino-name">{{ .Params.casino_name | default .Title }}</h3>
+                
+                
+                {{ if .Params.rating }}
+                <div class="casino-rating">
+                  <div class="stars">
+                    {{ $rating := .Params.rating }}
+                    {{ range seq 5 }}
+                      {{ if le . (float $rating) }}
+                        <span class="star filled">★</span>
+                      {{ else }}
+                        <span class="star">☆</span>
+                      {{ end }}
+                    {{ end }}
+                  </div>
+                  <span class="rating-value">{{ .Params.rating }}/5</span>
+                </div>
+                {{ end }}
+
+                
+                {{ if .Params.bonus }}
+                <div class="casino-bonus">
+                  <div class="bonus-title">{{ $.Site.Params.ui.bonus | default "Bonus" }}</div>
+                  <div class="bonus-value">{{ .Params.bonus }}</div>
+                </div>
+                {{ end }}
+
+                
+                <div class="casino-deposits">
+                  {{ if .Params.min_deposit }}
+                    <div class="deposit-info">
+                      <span class="deposit-label">{{ $.Site.Params.ui.min_deposit | default "Min Deposit" }}:</span>
+                      <span class="deposit-value">{{ .Params.min_deposit }}</span>
+                    </div>
+                  {{ end }}
+                  {{ if .Params.max_deposit }}
+                    <div class="deposit-info">
+                      <span class="deposit-label">{{ $.Site.Params.ui.max_deposit | default "Max Deposit" }}:</span>
+                      <span class="deposit-value">{{ .Params.max_deposit }}</span>
+                    </div>
+                  {{ end }}
+                </div>
+
+                
+                <div class="casino-description">
+                  {{ .Summary | truncate 60 }}
+                </div>
+
+                
+                <div class="casino-actions">
+                  <a href="{{ .Permalink }}" class="btn-review">
+                    {{ $.Site.Params.ui.read_review | default "Read Review" }}
+                  </a>
+                  {{ if .Params.play_url }}
+                    <a href="{{ .Params.play_url }}" class="btn-play" rel="noopener sponsored" data-secure-link>
+                      {{ $.Site.Params.ui.play_now | default "Play Now" }}
+                    </a>
+                  {{ end }}
+                </div>
+              </div>
+            </article>
+          {{ end }}
+        {{ end }}
+      </div>
+
+      <!-- Load More Button -->
+      {{ if .Site.Params.reviews.show_load_more }}
+      <div class="load-more-section">
+        <button class="btn-load-more">{{ .Site.Params.ui.load_more | default "Load More Reviews" }}</button>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+
+    <!-- Main Article Content Section -->
+    {{ if .Content }}
+    <section class="section article main-content">
+      <div class="content-section">
+        {{ .Content }}
+      </div>
+    </section>
+    {{ end }}
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <!-- Trust widgets -->
+  {{ if .Site.Params.trust.trustpilot }}
+  <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+  {{ end }}
+  
+  <div class="footer-container">
+    <div class="footer-content">
+      <!-- Branding -->
+      <div class="footer-brand">
+        {{ if .Site.Params.organization.logo }}
+          <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}" class="footer-logo">
+        {{ end }}
+        {{ if .Site.Params.organization.description }}
+          <p class="footer-description">{{ .Site.Params.organization.description }}</p>
+        {{ end }}
+        
+        <!-- Social Links 
+        {{ if .Site.Params.social }}
+        <div class="social-links">
+          {{ with .Site.Params.social.facebook }}
+            <a href="{{ . }}" rel="noopener" aria-label="Facebook">📘</a>
+          {{ end }}
+          {{ with .Site.Params.social.twitter }}
+            <a href="{{ . }}" rel="noopener" aria-label="Twitter">🐦</a>
+          {{ end }}
+          {{ with .Site.Params.social.instagram }}
+            <a href="{{ . }}" rel="noopener" aria-label="Instagram">📷</a>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>-->
+
+
+      <!-- Quick Links -->
+      <div class="footer-column">
+        <h4>{{ .Site.Params.footer.quick_links_title | default "Quick Links" }}</h4>
+        <ul>
+          {{ range .Site.Menus.footer_quick }}
+            <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <!-- Legal Links -->
+      <div class="footer-column">
+        <h4>{{ .Site.Params.footer.legal_title | default "Legal" }}</h4>
+        <ul>
+          {{ range .Site.Menus.footer_legal }}
+            <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      {{ if .Site.Params.contact }}
+      <div class="footer-column footer-contact">
+        <h4>{{ .Site.Params.footer.contact_title | default "Contact" }}</h4>
+        {{ if .Site.Params.contact.email }}
+          <p><a href="mailto:{{ .Site.Params.contact.email }}">{{ .Site.Params.contact.email }}</a></p>
+        {{ end }}
+        {{ if .Site.Params.contact.address }}
+          <p>{{ .Site.Params.contact.address }}</p>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        {{ if .Site.Params.organization.logo }}
+          <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}" class="footer-bottom-logo">
+        {{ end }}
+        <p class="footer-copyright">
+          © {{ now.Format "2006" }} {{ .Site.Title }}. {{ .Site.Params.footer.copyright_text | default "All rights reserved." }}
+        </p>
+      </div>
+      
+      <!-- Disclaimer -->
+      {{ if .Site.Params.footer.disclaimer }}
+        <p class="footer-disclaimer">{{ .Site.Params.footer.disclaimer }}</p>
+      {{ end }}
+      
+      <!-- Age verification -->
+      {{ if .Site.Params.footer.age_verification }}
+        <div class="age-verification">{{ .Site.Params.footer.age_verification }}</div>
+      {{ end }}
+    </div>
+  </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+  // Language switcher
+  document.addEventListener("DOMContentLoaded", function () {
+    const switcher = document.querySelector(".language-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("click", function (e) {
+        e.stopPropagation();
+        this.classList.toggle("active");
+      });
+
+      document.addEventListener("click", function () {
+        switcher.classList.remove("active");
+      });
+    }
+  });
+
+  // Mobile menu toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    const menu = document.querySelector('.mobile-menu');
+    
+    if (toggle && menu) {
+      toggle.addEventListener('click', function() {
+        menu.classList.toggle('active');
+      });
+    }
+  });
+</script>
+<script src="/js/go.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+- id: commentsEyebrow
+  translation: "Отзывы игроков"
+
+- id: commentsTitle
+  translation: "Что игроки говорят о {{ .Casino }}?"
+
+- id: commentsLeadSingle
+  translation: "Один отзыв от наших читателей."
+
+- id: commentsLeadPlural
+  translation: "{{ .Count }} отзывов от наших читателей."
+
+- id: commentsLeadEmpty
+  translation: "Пока что отзывов нет — поделитесь своими впечатлениями первыми."
+
+- id: commentsPlayCta
+  translation: "Играть в {{ .Casino }}"
+
+- id: commentsEmpty
+  translation: "Еще никто не оставил отзыв о {{ .Casino }}. Станьте первым, кто поделится опытом."
+
+- id: commentsFormHeading
+  translation: "Оставьте свой отзыв"
+
+- id: commentsFormLead
+  translation: "Расскажите о своем опыте с {{ .Casino }}. Без регистрации — просто укажите ник и сообщение."
+
+- id: commentsFieldNickname
+  translation: "Ваш псевдоним"
+
+- id: commentsFieldNicknamePlaceholder
+  translation: "Player123"
+
+- id: commentsFieldExperience
+  translation: "Как прошла игра?"
+
+- id: commentsFieldExperiencePlaceholder
+  translation: "Опишите сессию, вывод средств или бонусы..."
+
+- id: commentsSubmit
+  translation: "Отправить отзыв"
+
+- id: commentsStatus
+  translation: "Спасибо! Ваш комментарий отправлен на модерацию."

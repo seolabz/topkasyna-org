@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.LanguageCode }}">
+<head>
+  <meta charset="UTF-8">
+ <title>{{ .Title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+  <!-- Multilingual support -->
+  {{ range .AllTranslations }}
+  <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
+  {{ end }}
+  {{ range .Site.Languages }}
+    {{ if ne .Lang $.Site.Language.Lang }}
+      {{ $alt := first 1 (where $.Translations "Lang" .Lang) }}
+      {{ if gt (len $alt) 0 }}
+        <link rel="alternate" hreflang="{{ .Lang }}" href="{{ (index $alt 0).RelPermalink }}">
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+  
+  <!-- SEO Meta Tags -->
+  {{ with .Params.description }}
+    <meta name="description" content="{{ . }}">
+  {{ else }}
+    <meta name="description" content="{{ .Summary }}">
+  {{ end }}
+  {{ with .Params.keywords }}
+    <meta name="keywords" content="{{ delimit . ", " }}">
+  {{ end }}
+  {{ with .Params.canonical }}
+    <link rel="canonical" href="{{ . }}">
+  {{ end }}
+  
+  <!-- Favicon -->
+  {{ with .Site.Params.favicon }}
+    <link rel="icon" href="{{ . | relURL }}" type="image/png">
+  {{ end }}
+  
+  <!-- Schema.org JSON-LD for Casino Review -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "itemReviewed": {
+      "@type": "Organization",
+      "name": "{{ .Title }}",
+      {{ with .Params.casino_logo }}"image": "{{ . | absURL }}",{{ end }}
+      {{ with .Params.play_url }}"url": "{{ . }}"{{ end }}
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "{{ .Site.Title }}"
+    },
+    {{ with .Params.rating }}"reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "{{ . }}",
+      "bestRating": "5"
+    },{{ end }}
+    "datePublished": "{{ .Date.Format "2006-01-02" }}",
+    "dateModified": "{{ .Lastmod.Format "2006-01-02" }}",
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ .Site.Title }}",
+      {{ with .Site.Params.organization.logo }}"logo": {
+        "@type": "ImageObject",
+        "url": "{{ . }}"
+      }{{ end }}
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "{{ .Site.Params.ui.home | default "Home" }}",
+          "item": "{{ .Site.BaseURL }}{{ .Site.Language.Lang }}/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "{{ .Site.Params.ui.casinos | default "Betting Sites" }}",
+          "item": "{{ .Site.BaseURL }}{{ .Site.Language.Lang }}/betting-sites/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ .Title }}",
+          "item": "{{ .Permalink }}"
+        }
+      ]
+    }
+  }
+  </script>
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+  {{ with .Params.description }}
+    <meta property="og:description" content="{{ . }}">
+  {{ else }}
+    <meta property="og:description" content="{{ .Summary }}">
+  {{ end }}
+  {{ with .Params.casino_logo }}
+    <meta property="og:image" content="{{ . | absURL }}">
+  {{ end }}
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:locale" content="{{ .Site.Language.Lang }}">
+  <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+  <meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+  
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Title }}">
+  {{ with .Params.description }}
+    <meta name="twitter:description" content="{{ . }}">
+  {{ else }}
+    <meta name="twitter:description" content="{{ .Summary }}">
+  {{ end }}
+  {{ with .Params.casino_logo }}
+    <meta name="twitter:image" content="{{ . | absURL }}">
+  {{ end }}
+  {{ with .Site.Params.social.twitter }}
+    <meta name="twitter:site" content="@{{ . }}">
+  {{ end }}
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/comments-section.css">
+
+  <!-- Trust/Verification tags -->
+  {{ with .Site.Params.verification.trustpilot }}
+  <meta name="trustpilot-one-time-domain-verification-id" content="{{ . }}"/>
+  {{ end }}
+  {{ with .Site.Params.verification.google }}
+  <meta name="google-site-verification" content="{{ . }}" />
+  {{ end }}
+</head>
+<body>
+
+<!-- Header -->
+<header class="topbar">
+  <div class="topbar-left">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}">
+    </div>
+  </div>
+  
+  <!-- Desktop navigation menu -->
+  <nav class="main-nav">
+    {{ range .Site.Menus.main }}
+      <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+    {{ end }}
+  </nav>
+  
+  <div class="topbar-right">
+    <!-- Language switcher
+    <div class="language-switcher">
+      <div class="lang-current">
+        <img src="/flags/{{ .Site.Language.Lang }}.png" alt="{{ .Site.Language.LanguageName }}" class="flag-icon">
+        {{ .Site.Language.LanguageName }}
+        <div class="lang-dropdown">
+          {{ range .Site.Languages }}
+            {{ if ne .Lang $.Site.Language.Lang }}
+              {{ $alt := first 1 (where $.Translations "Lang" .Lang) }}
+              {{ if gt (len $alt) 0 }}
+                <a href="{{ (index $alt 0).RelPermalink }}" class="lang-option">
+                  <img src="/flags/{{ .Lang }}.png" alt="{{ .LanguageName }}" class="flag-icon">
+                  {{ .LanguageName }}
+                </a>
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </div>
+      </div>
+    </div>-->
+    
+    <!-- Header buttons -->
+    {{ range .Site.Menus.header }}
+      <a href="{{ .URL }}" class="{{ .Params.class }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+    {{ end }}
+  </div>
+</header>
+
+<!-- Mobile Navigation -->
+<div class="mobile-nav">
+  <div class="mobile-header">
+    <div class="mobile-logo">
+      <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}">
+    </div>
+    <button class="mobile-menu-toggle" aria-label="{{ .Site.Params.ui.open_menu | default "Open menu" }}">☰</button>
+  </div>
+
+  <div class="mobile-menu">
+    {{ range .Site.Menus.main }}
+      <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}"{{ end }}>{{ .Name }}</a>
+    {{ end }}
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+<!-- Breadcrumbs Section -->
+<section class="breadcrumbs-section">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="{{ .Site.Params.ui.breadcrumb_nav | default "Breadcrumb navigation" }}">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item">
+          <a href="/">
+            <span class="breadcrumb-icon">🏠</span>
+            {{ .Site.Params.ui.home | default "Home" }}
+          </a>
+        </li>
+        <li class="breadcrumb-separator">›</li>
+        <li class="breadcrumb-item">
+          <span>{{ .Site.Params.ui.casinos | default "Betting Sites" }}</span>
+        </li>
+        <li class="breadcrumb-separator">›</li>
+        <li class="breadcrumb-item current" aria-current="page">
+          <span>{{ .Params.casino_name }}</span>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+  </section>
+
+  <!-- Hero Section -->
+  <section class="hero-section" {{ with .Params.banner_image }}style="background: url('{{ . }}') center/cover no-repeat;"{{ end }}>
+    <div class="hero-content">
+      <h1 class="hero-title">{{ .Params.hero_title | default .Title }}</h1>
+      {{ with .Params.hero_subtitle }}
+        <p class="hero-subtitle">{{ . }}</p>
+      {{ end }}
+      {{ if .Params.play_url }}
+        <a href="{{ .Params.play_url }}" class="hero-btn" rel="noopener sponsored" data-secure-link>
+          {{ .Site.Params.ui.play_now | default "Play Now" }}
+        </a>
+      {{ end }}
+    </div>
+  </section>
+
+  <!-- Casino Info Block -->
+  <section class="casino-info-section">
+    <div class="container">
+      <div class="casino-info-card">
+        <!-- Casino Header -->
+        {{ if .Params.casino_logo }}
+        <div class="casino-header">
+          <div class="casino-logo-large">
+            <img src="{{ .Params.casino_logo }}" alt="{{ .Title }} {{ .Site.Params.ui.logo | default "logo" }}">
+          </div>
+          <div class="casino-meta">
+            <h2 class="casino-name">{{ .Params.casino_name | default .Title }}</h2>
+            {{ if .Params.rating }}
+            <div class="casino-rating">
+              <div class="stars">
+                {{ range seq 5 }}
+                  {{ if le . $.Params.rating }}
+                    <span class="star filled">★</span>
+                  {{ else }}
+                    <span class="star">☆</span>
+                  {{ end }}
+                {{ end }}
+              </div>
+              <span class="rating-value">{{ .Params.rating }}/5</span>
+            </div>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+
+        <!-- Casino Specifications -->
+        <div class="casino-specs">
+          <div class="spec-grid">
+            <!-- Bonus -->
+            {{ if .Params.bonus }}
+            <div class="spec-item bonus-item">
+              <h4>{{ .Site.Params.ui.bonus | default "Bonus" }}</h4>
+              <div class="spec-value bonus-highlight">
+                {{ .Params.bonus }}
+              </div>
+            </div>
+            {{ end }}
+
+            <!-- Deposit Limits -->
+            {{ if or .Params.min_deposit .Params.max_deposit }}
+            <div class="spec-item">
+              <h4>{{ .Site.Params.ui.deposit_limits | default "Deposit Limits" }}</h4>
+              <div class="spec-value">
+                {{ if .Params.min_deposit }}{{ .Site.Params.ui.min_deposit | default "Min:" }} {{ .Params.min_deposit }}{{ end }}
+                {{ if and .Params.min_deposit .Params.max_deposit }} / {{ end }}
+                {{ if .Params.max_deposit }}{{ .Site.Params.ui.max_deposit | default "Max:" }} {{ .Params.max_deposit }}{{ end }}
+              </div>
+            </div>
+            {{ end }}
+
+            <!-- Currencies -->
+            {{ if .Params.currencies }}
+            <div class="spec-item">
+              <h4>{{ .Site.Params.ui.currencies | default "Currencies" }}</h4>
+              <div class="spec-value currencies">
+                {{ range .Params.currencies }}
+                <span class="currency">{{ . }}</span>
+                {{ end }}
+              </div>
+            </div>
+            {{ end }}
+
+            <!-- Languages -->
+            {{ if .Params.languages }}
+            <div class="spec-item">
+              <h4>{{ .Site.Params.ui.languages | default "Languages" }}</h4>
+              <div class="spec-value languages">
+                {{ range .Params.languages }}
+                <img src="/flags/{{ . }}.png" alt="{{ . }}" class="flag-icon" title="{{ . }}">
+                {{ end }}
+              </div>
+            </div>
+            {{ end }}
+
+            <!-- Devices -->
+            {{ if .Params.devices }}
+            <div class="spec-item">
+              <h4>{{ .Site.Params.ui.devices | default "Devices" }}</h4>
+              <div class="spec-value">
+                {{ range .Params.devices }}
+                <span class="device">{{ . }}</span>
+                {{ end }}
+              </div>
+            </div>
+            {{ end }}
+
+            <!-- Support -->
+            {{ if .Params.support }}
+            <div class="spec-item">
+              <h4>{{ .Site.Params.ui.support | default "Support" }}</h4>
+              <div class="spec-value">
+                {{ range .Params.support }}
+                <span class="support-method">{{ . }}</span>
+                {{ end }}
+              </div>
+            </div>
+            {{ end }}
+
+            <!-- Payment Methods -->
+            {{ if .Params.payment_methods }}
+            <div class="spec-item">
+              <h4>{{ .Site.Params.ui.payment_methods | default "Payment Methods" }}</h4>
+              <div class="spec-value payment-methods">
+                {{ range .Params.payment_methods }}
+                <span class="payment-method">{{ . }}</span>
+                {{ end }}
+              </div>
+            </div>
+            {{ end }}
+
+            <!-- License -->
+            {{ if .Params.license }}
+            <div class="spec-item">
+              <h4>{{ .Site.Params.ui.license | default "License" }}</h4>
+              <div class="spec-value">
+                {{ .Params.license }}
+              </div>
+            </div>
+            {{ end }}
+          </div>
+
+          <!-- CTA Button -->
+          {{ if .Params.play_url }}
+          <div class="casino-cta">
+            <a href="{{ .Params.play_url }}" class="btn btn-large" rel="noopener sponsored" data-secure-link>
+              {{ .Site.Params.ui.play_at | default "Play at" }} {{ .Params.casino_name }}
+            </a>
+          </div>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Review Content -->
+    <!-- Main Article Content Section -->
+    {{ if .Content }}
+    <section class="section article main-content">
+      <div class="content-section">
+        {{ .Content }}
+      </div>
+    </section>
+    {{ end }}
+    {{ partial "comments-section.html" . }}
+      </article>
+
+      <!-- Navigation -->
+      <div class="review-navigation">
+        <a href="/" class="btn btn-secondary">
+          ← {{ .Site.Params.ui.back_to_casinos | default "Back to Betting Sites" }}
+        </a>
+        
+        <!-- Related Betting Sites -->
+        {{ if .Site.Params.single.show_related }}
+        <div class="related-casinos">
+          <h3>{{ .Site.Params.ui.related_casinos | default "Related Betting Sites" }}</h3>
+          <div class="related-grid">
+            {{ $related := where (where .Site.RegularPages "Section" "online-casino") ".Permalink" "!=" .Permalink | first 3 }}
+            {{ range $related }}
+              <div class="related-card">
+                {{ if .Params.casino_logo }}
+                  <img src="{{ .Params.casino_logo }}" alt="{{ .Title }}" class="related-logo">
+                {{ end }}
+                <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                {{ if .Params.rating }}
+                  <div class="related-rating">{{ .Params.rating }}/5 ★</div>
+                {{ end }}
+              </div>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <!-- Trust widgets -->
+  {{ if .Site.Params.trust.trustpilot }}
+  <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+  {{ end }}
+  
+  <div class="footer-container">
+    <div class="footer-content">
+      <!-- Branding -->
+      <div class="footer-brand">
+        {{ if .Site.Params.organization.logo }}
+          <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}" class="footer-logo">
+        {{ end }}
+        {{ if .Site.Params.organization.description }}
+          <p class="footer-description">{{ .Site.Params.organization.description }}</p>
+        {{ end }}
+        
+        <!-- Social Links 
+        {{ if .Site.Params.social }}
+        <div class="social-links">
+          {{ with .Site.Params.social.facebook }}
+            <a href="{{ . }}" rel="noopener" aria-label="Facebook">📘</a>
+          {{ end }}
+          {{ with .Site.Params.social.twitter }}
+            <a href="{{ . }}" rel="noopener" aria-label="Twitter">🐦</a>
+          {{ end }}
+          {{ with .Site.Params.social.instagram }}
+            <a href="{{ . }}" rel="noopener" aria-label="Instagram">📷</a>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>-->
+
+
+      <!-- Quick Links -->
+      <div class="footer-column">
+        <h4>{{ .Site.Params.footer.quick_links_title | default "Quick Links" }}</h4>
+        <ul>
+          {{ range .Site.Menus.footer_quick }}
+            <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <!-- Legal Links -->
+      <div class="footer-column">
+        <h4>{{ .Site.Params.footer.legal_title | default "Legal" }}</h4>
+        <ul>
+          {{ range .Site.Menus.footer_legal }}
+            <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      {{ if .Site.Params.contact }}
+      <div class="footer-column footer-contact">
+        <h4>{{ .Site.Params.footer.contact_title | default "Contact" }}</h4>
+        {{ if .Site.Params.contact.email }}
+          <p><a href="mailto:{{ .Site.Params.contact.email }}">{{ .Site.Params.contact.email }}</a></p>
+        {{ end }}
+        {{ if .Site.Params.contact.address }}
+          <p>{{ .Site.Params.contact.address }}</p>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        {{ if .Site.Params.organization.logo }}
+          <img src="{{ .Site.Params.organization.logo }}" alt="{{ .Site.Title }}" class="footer-bottom-logo">
+        {{ end }}
+        <p class="footer-copyright">
+          © {{ now.Format "2006" }} {{ .Site.Title }}. {{ .Site.Params.footer.copyright_text | default "All rights reserved." }}
+        </p>
+      </div>
+      
+      <!-- Disclaimer -->
+      {{ if .Site.Params.footer.disclaimer }}
+        <p class="footer-disclaimer">{{ .Site.Params.footer.disclaimer }}</p>
+      {{ end }}
+      
+      <!-- Age verification -->
+      {{ if .Site.Params.footer.age_verification }}
+        <div class="age-verification">{{ .Site.Params.footer.age_verification }}</div>
+      {{ end }}
+    </div>
+  </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+  // Language switcher
+  document.addEventListener("DOMContentLoaded", function () {
+    const switcher = document.querySelector(".language-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("click", function (e) {
+        e.stopPropagation();
+        this.classList.toggle("active");
+      });
+
+      document.addEventListener("click", function () {
+        switcher.classList.remove("active");
+      });
+    }
+  });
+
+  // Mobile menu toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    const menu = document.querySelector('.mobile-menu');
+    
+    if (toggle && menu) {
+      toggle.addEventListener('click', function() {
+        menu.classList.toggle('active');
+      });
+    }
+  });
+</script>
+<script src="/js/go.js" defer></script>
+
+</body>
+</html>

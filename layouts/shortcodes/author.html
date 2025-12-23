@@ -1,0 +1,58 @@
+{{- $id := .Get "id" -}}
+{{- $link := .Get "link" | default true -}}
+{{- $path := printf "authors/%s" $id -}}
+{{- $page := .Page -}}
+
+{{/* 1) пробуем в текущем языке */}}
+{{- $p := site.GetPage $path -}}
+
+{{/* 2) если не нашли — ищем в defaultContentLanguage */}}
+{{- if not $p -}}
+  {{- $def := site.Params.defaultContentLanguage | default site.Language.Lang -}}
+  {{- range site.Sites -}}
+    {{- if and (not $p) (eq .Language.Lang $def) -}}
+      {{- $p = .GetPage $path -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- with $p -}}
+  {{- $isAuthorPage := eq $page.RelPermalink .RelPermalink -}}
+
+  <div class="author-box flex items-center gap-3">
+    {{- with .Params.avatar -}}
+      <img src="{{ . | relURL }}" alt="{{ $.Page.Title }}" class="author-avatar" loading="lazy" decoding="async" width="64" height="64">
+    {{- end -}}
+    <div class="author-meta">
+      {{- if and $link (not $isAuthorPage) -}}
+        <a href="{{ .RelPermalink }}" class="author-name">{{ .Title }}</a>
+      {{- else -}}
+        <span class="author-name">{{ .Title }}</span>
+      {{- end -}}
+      {{- with .Params.description -}}
+        <div class="author-desc">{{ . }}</div>
+      {{- end -}}
+    </div>
+  </div>
+
+  {{/* Расширенный блок на странице автора: большое фото и краткое описание */}}
+  {{- if $isAuthorPage -}}
+    <section class="author-profile mt-6 grid grid-cols-1 md:grid-cols-[160px_1fr] gap-6 items-start">
+      <div>
+        {{- with .Params.avatar -}}
+          <img src="{{ . | relURL }}" alt="{{ $.Page.Title }}" class="author-avatar-large rounded-lg" loading="lazy" decoding="async" width="160" height="160">
+        {{- end -}}
+      </div>
+      <div>
+        <h1 class="author-title text-2xl font-semibold mb-2">{{ .Title }}</h1>
+        {{- with .Params.description -}}
+          <p class="author-bio text-base leading-relaxed">{{ . }}</p>
+        {{- else -}}
+          {{- with .Summary -}}
+            <p class="author-bio text-base leading-relaxed">{{ . }}</p>
+          {{- end -}}
+        {{- end -}}
+      </div>
+    </section>
+  {{- end -}}
+{{- end -}}

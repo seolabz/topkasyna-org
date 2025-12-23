@@ -1,0 +1,20 @@
+{{- $pages := where site.Pages ".Params.excludeFromSitemap" "ne" true -}}
+{{- $pages := where $pages "RelPermalink" "ne" "/online-casino/" -}}
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n" | safeHTML }}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {{- range $pages }}
+  <url>
+    <loc>{{ .Permalink }}</loc>
+    {{- with .Lastmod }}
+    <lastmod>{{ .Format "2006-01-02T15:04:05Z07:00" }}</lastmod>
+    {{- end }}
+    {{- if .IsHome }}
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    {{- else }}
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    {{- end }}
+  </url>
+  {{- end }}
+</urlset>

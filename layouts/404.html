@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="{{ .Params.lang }}">
+<head>
+  <meta charset="UTF-8">
+  <title>404 | {{ site.Params.organization.name }}</title>
+  {{ with .Site.Params.favicon }}
+  <link rel="icon" href="{{ . | relURL }}" type="image/png">
+{{ end }}
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    img.logo {
+      max-width: 200px;
+      margin-bottom: 30px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #007acc;
+      text-decoration: none;
+      font-size: 50px;
+      font-weight: bold;
+    }
+    h1 {
+      font-size: 2.5em;
+    }
+    p {
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <a href="/{{ .Site.Language.Lang }}/">
+    <img src="{{ site.Params.organization.logo }}" alt="{{ .Site.Params.name }}" class="logo">
+  </a>
+  <h1>404 — PAGE NOT FOUND</h1>
+  <p>Nothing here...</p>
+  <a href="/">Homepage</a>
+</body>
+</html>

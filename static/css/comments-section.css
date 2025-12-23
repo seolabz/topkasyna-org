@@ -1,0 +1,198 @@
+:root {
+  --comments-bg: #050a16;
+  --comments-card-bg: rgba(255, 255, 255, 0.03);
+  --comments-border: rgba(255, 255, 255, 0.08);
+  --comments-accent: #ff5772;
+  --comments-muted: #9fb0c7;
+  --comments-text: #f0f4ff;
+  --comments-shadow: 0 20px 60px rgba(5, 10, 22, 0.45);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --comments-bg: #f4f6fb;
+    --comments-card-bg: #ffffff;
+    --comments-border: rgba(15, 23, 42, 0.08);
+    --comments-accent: #f97316;
+    --comments-muted: #556079;
+    --comments-text: #0f172a;
+    --comments-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+  }
+}
+
+.casino-comments {
+  margin-top: 4rem;
+  padding: 4rem 1.5rem;
+  background: var(--comments-bg);
+  color: var(--comments-text);
+}
+
+.casino-comments__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  gap: 2.5rem;
+}
+
+.casino-comments__header .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.85rem;
+  color: var(--comments-accent);
+  margin-bottom: 0.75rem;
+}
+
+.casino-comments__header h2 {
+  font-size: clamp(1.75rem, 4vw, 2.4rem);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.casino-comments__header .lead {
+  color: var(--comments-muted);
+  max-width: 720px;
+}
+
+.casino-comments__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.casino-comment {
+  padding: 1.5rem;
+  background: var(--comments-card-bg);
+  border: 1px solid var(--comments-border);
+  border-radius: 20px;
+  box-shadow: var(--comments-shadow);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.casino-comment:hover,
+.casino-comment:focus-within {
+  transform: translateY(-6px);
+  border-color: var(--comments-accent);
+}
+
+.casino-comment__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.casino-comment__author span {
+  font-weight: 600;
+}
+
+.casino-comment__cta {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--comments-accent);
+  text-decoration: underline;
+}
+
+.casino-comment time {
+  font-size: 0.85rem;
+  color: var(--comments-muted);
+  white-space: nowrap;
+}
+
+.casino-comment__text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--comments-text);
+}
+
+.casino-comments__empty {
+  font-size: 1rem;
+  color: var(--comments-muted);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px dashed var(--comments-border);
+  text-align: center;
+}
+
+.casino-comments__form {
+  padding: 2rem;
+  background: var(--comments-card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--comments-border);
+  box-shadow: var(--comments-shadow);
+}
+
+.casino-comments__form h3 {
+  font-size: 1.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.casino-comments__form .form-lead {
+  color: var(--comments-muted);
+  margin-bottom: 1.5rem;
+}
+
+.comment-form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field span {
+  font-weight: 600;
+}
+
+.form-field input,
+.form-field textarea {
+  border-radius: 14px;
+  border: 1px solid var(--comments-border);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.85rem 1rem;
+  color: var(--comments-text);
+  font-size: 1rem;
+}
+
+.form-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.comment-submit {
+  align-self: start;
+  padding: 0.95rem 2rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--comments-accent), #f43f5e);
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.comment-submit:hover,
+.comment-submit:focus-visible {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.comment-status {
+  min-height: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--comments-accent);
+}
+
+@media (max-width: 640px) {
+  .casino-comment__meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .casino-comments {
+    padding: 3rem 1rem;
+  }
+}

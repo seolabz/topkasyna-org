@@ -1,0 +1,358 @@
+baseURL = "https://topkasyna.org/"
+languageCode = 'ru-pl'
+title = 'socialmediacontent.pl - Лучшие сайты для онлайн-ставок в Польше'
+
+# Basic settings
+defaultContentLanguage = 'ru-pl'
+defaultContentLanguageInSubdir = false
+enableRobotsTXT = true
+enableGitInfo = false
+enableEmoji = true
+
+disableKinds = ["taxonomy", "taxonomyTerm", "section"]
+
+# Complete deactivation of taxonomies
+[taxonomies]
+
+# Languages
+[languages]
+  [languages.ru-pl]
+    languageName = 'ru'
+    weight = 1
+    title = 'socialmediacontent.pl - Лучшие сайты для онлайн-ставок в Польше'
+    contentDir = "content/en"
+
+# Menu for Russian (PL) language
+[languages.ru-pl.menu]
+  [[languages.ru-pl.menu.main]]
+  name = 'Главная'
+  url = '/'
+  weight = 10
+    [[languages.ru-pl.menu.main]]
+  name = 'Planbet'
+  url = '/planbet/'
+  weight = 20
+    [[languages.ru-pl.menu.main]]
+  name = 'Azurslot'
+  url = '/azurslot/'
+  weight = 30
+      [[languages.ru-pl.menu.main]]
+  name = 'Starda'
+  url = '/starda/'
+  weight = 40
+      [[languages.ru-pl.menu.main]]
+  name = 'StoneVegas'
+  url = '/stonevegas/'
+  weight = 50
+      [[languages.ru-pl.menu.main]]
+  name = 'Winwin'
+  url = '/winwin/'
+  weight = 60
+
+  [[languages.ru-pl.menu.footer_quick]]
+  name = 'О нас'
+  url = '/'
+  weight = 10
+
+  [[languages.ru-pl.menu.footer_quick]]
+  name = 'Контакты'
+  url = '/'
+  weight = 20
+
+  [[languages.ru-pl.menu.footer_quick]]
+  name = 'Новости'
+  url = '/'
+  weight = 30
+
+  [[languages.ru-pl.menu.footer_quick]]
+  name = 'Руководство по ставкам на спорт'
+  url = '/'
+  weight = 40
+
+  [[languages.ru-pl.menu.footer_legal]]
+  name = 'Условия и положения'
+  url = '/'
+  weight = 10
+
+  [[languages.ru-pl.menu.footer_legal]]
+  name = 'Политика конфиденциальности'
+  url = '/'
+  weight = 20
+
+  [[languages.ru-pl.menu.footer_legal]]
+  name = 'Ответственная игра'
+  url = '/'
+  weight = 30
+
+  [[languages.ru-pl.menu.footer_legal]]
+  name = 'Отказ от ответственности'
+  url = '/'
+  weight = 40
+
+# Parameters for English (UAE) language
+[languages.ru-pl.params.ui]
+  home = 'Главная'
+  betting_sites = 'Букмекерские конторы'
+  betting_sites_plural = 'Букмекерские конторы'
+  betting_site = 'Букмекерская контора'
+  bookmaker = 'Букмекер'
+  sportsbook = 'Ставки на спорт'
+  all = 'Все'
+  exclusive = 'EXCLUSIVE'
+   bonus = 'Бонус'
+  welcome_bonus = 'Приветственный бонус'
+  rating = 'Рейтинг'
+  min_deposit = 'Мин. депозит'
+  max_deposit = 'Макс. депозит'
+  deposit_limits = 'Лимиты на депозит'
+ withdrawal_time = 'Время вывода'
+  currencies = 'Валюты'
+  languages = 'Языки'
+  devices = 'Устройства'
+  support = 'Поддержка'
+  payment_methods = 'Способы оплаты'
+  license = 'Лицензия'
+  sports_coverage = 'Охват спортивных событий'
+  live_betting = 'Live-ставки'
+  mobile_app = 'Мобильное приложение'
+  read_review = 'Читать обзор'
+  bet_now = 'Сделать ставку'
+  visit_site = 'Перейти на сайт'
+  claim_bonus = 'Получить бонус'
+  learn_more = 'Узнать больше'
+  load_more = 'Загрузить еще'
+ showing_results = 'Показано'
+  sort_by = 'Сортировать по'
+  filter_by = 'Фильтр'
+  name = 'Название'
+  top_rated = 'Лучшие по рейтингу'
+  newest = 'Новые'
+  highest_bonus = 'Самый высокий бонус'
+  previous = 'Назад'
+  next = 'Вперед'
+  back_to_betting_sites = 'Назад к букмекерским конторам'
+  related_betting_sites = 'Похожие букмекерские конторы'
+ open_menu = 'Открыть меню'
+  breadcrumb_nav = 'Навигация'
+  pagination_nav = 'Страницы'
+  logo = 'Логотип'
+  uae = 'UAE'
+  dubai = 'Dubai'
+  abu_dhabi = 'Abu Dhabi'
+
+[languages.ru-pl.params.footer]
+ quick_links_title = 'Быстрые ссылки'
+  categories_title = 'Категории'
+  legal_title = 'Юридическая информация'
+  contact_title = 'Контакты'
+  copyright_text = 'Все права защищены.'
+  disclaimer = 'Играйте ответственно и только если вам больше 18 лет. Азартные игры могут вызывать зависимость — обратитесь за помощью, если это необходимо.'
+  age_verification = '18+ Только для совершеннолетних'
+  jurisdiction_notice = 'Законы об азартных играх в Интернете различаются в зависимости от юрисдикции. Пожалуйста, ознакомьтесь с местными правилами, прежде чем делать ставки.'
+
+[languages.ru-pl.params.organization]
+  name = 'socialmediacontent.pl'
+  description = 'Независимые обзоры лучших сайтов для онлайн-ставок в Польше'
+  logo = '/images/logo-s.webp'
+  url = 'https://socialmediacontent.pl/'
+
+[languages.ru-pl.params.contact]
+  email = 'info@socialmediacontent.pl'
+  address = 'Варшава, Польша'
+
+[languages.ru-pl.params.social]
+  facebook = ''
+  twitter = ''
+  instagram = ''
+  telegram = ''
+
+[languages.ru-pl.params.reviews]
+section_title = 'Лучшие онлайн казино Польши'
+  section_description = 'Подробные обзоры лучшие онлайн казино для игроков из Польши'
+  list_title = 'Лучшие онлайн казино Польши'
+  list_description = 'Детальные обзоры лучших платформ для онлайн-ставок, доступных игрокам из Польши'
+  show_filters = true
+  show_load_more = true
+
+
+[languages.ru-pl.params.verification]
+  google = 'your-google-site-verification'
+  trustpilot = 'your-trustpilot-verification-id'
+
+# Main menu (for backward compatibility)
+[[menu.main]]
+  name = 'Главная'
+  url = '/'
+  weight = 10
+
+[[menu.main]]
+ [[menu.main]]
+  name = 'Лучшие букмекерские конторы'
+  url = '/'
+  weight = 20
+
+[[menu.main]]
+  name = 'Обзоры'
+  url = '/'
+  weight = 30
+
+[[menu.main]]
+  name = 'Бонусы'
+  url = '/'
+  weight = 40
+
+# Footer menu
+[[menu.footer_quick]]
+  name = 'О нас'
+  url = '/'
+  weight = 10
+
+[[menu.footer_quick]]
+  name = 'Контакты'
+  url = '/'
+  weight = 20
+
+[[menu.footer_quick]]
+  name = 'Новости'
+  url = '/'
+  weight = 30
+
+[[menu.footer_quick]]
+  name = 'Руководство по ставкам'
+  url = '/'
+  weight = 40
+
+[[menu.footer_legal]]
+  name = 'Правила и условия'
+  url = '/'
+  weight = 10
+
+[[menu.footer_legal]]
+  name = 'Политика конфиденциальности'
+  url = '/'
+  weight = 20
+
+[[menu.footer_legal]]
+  name = 'Ответственная игра'
+  url = '/'
+  weight = 30
+
+[[menu.footer_legal]]
+  name = 'Отказ от ответственности'
+  url = '/'
+  weight = 40
+
+# Website parameters
+[params]
+  favicon = '/images/favicon-s.png'
+  
+  [params.organization]
+    name = 'socialmediacontent.pl'
+    description = 'Independent reviews of the best online betting sites in UAE'
+    logo = '/images/logo-s.webp'
+    url = 'https://socialmediacontent.pl/'
+    
+  [params.contact]
+    email = 'info@socialmediacontent.pl'
+    address = 'Варшава, Польша'
+    
+  [params.social]
+    facebook = ''
+    twitter = ''
+    instagram = ''
+    telegram = ''
+    
+  [params.reviews]
+    section_title = 'Лучшие онлайн казино Польши'
+    section_description = 'Подробные обзоры лучшие онлайн казино для игроков из Польши'
+    list_title = 'Лучшие онлайн казино Польши'
+    list_description = 'Детальные обзоры лучших платформ для онлайн-ставок, доступных игрокам из Польши'
+    show_filters = true
+    show_load_more = true
+    
+  [params.support]
+    url = '/'
+    text = 'Поддержка'
+
+  [params.verification]
+    google = 'your-google-site-verification'
+    trustpilot = 'your-trustpilot-verification-id'
+    
+  [params.ui]
+  home = 'Главная'
+  betting_sites = 'Букмекерские конторы'
+  betting_sites_plural = 'Букмекерские конторы'
+  betting_site = 'Букмекерская контора'
+  bookmaker = 'Букмекер'
+  sportsbook = 'Ставки на спорт'
+  all = 'Все'
+  exclusive = 'EXCLUSIVE'
+   bonus = 'Бонус'
+  welcome_bonus = 'Приветственный бонус'
+  rating = 'Рейтинг'
+  min_deposit = 'Мин. депозит'
+  max_deposit = 'Макс. депозит'
+  deposit_limits = 'Лимиты на депозит'
+ withdrawal_time = 'Время вывода'
+  currencies = 'Валюты'
+  languages = 'Языки'
+  devices = 'Устройства'
+  support = 'Поддержка'
+  payment_methods = 'Способы оплаты'
+  license = 'Лицензия'
+  sports_coverage = 'Охват спортивных событий'
+  live_betting = 'Live-ставки'
+  mobile_app = 'Мобильное приложение'
+  read_review = 'Читать обзор'
+  bet_now = 'Сделать ставку'
+  visit_site = 'Перейти на сайт'
+  claim_bonus = 'Получить бонус'
+  learn_more = 'Узнать больше'
+  load_more = 'Загрузить еще'
+ showing_results = 'Показано'
+  sort_by = 'Сортировать по'
+  filter_by = 'Фильтр'
+  name = 'Название'
+  top_rated = 'Лучшие по рейтингу'
+  newest = 'Новые'
+  highest_bonus = 'Самый высокий бонус'
+  previous = 'Назад'
+  next = 'Вперед'
+  back_to_betting_sites = 'Назад к букмекерским конторам'
+  related_betting_sites = 'Похожие букмекерские конторы'
+ open_menu = 'Открыть меню'
+  breadcrumb_nav = 'Навигация'
+  pagination_nav = 'Страницы'
+  logo = 'Логотип'
+  uae = 'PL'
+  dubai = 'Польша'
+  abu_dhabi = 'Варшава'
+    
+  [params.footer]
+quick_links_title = 'Быстрые ссылки'
+categories_title = 'Категории'
+legal_title = 'Юридическая информация'
+contact_title = 'Контакты'
+copyright_text = 'Все права защищены.'
+disclaimer = 'Играйте ответственно и только если вам исполнилось 18 лет. Азартные игры могут вызывать зависимость — обратитесь за помощью при необходимости.'
+age_verification = '18+ Только для совершеннолетних'
+jurisdiction_notice = 'Законы об азартных онлайн-играх различаются в зависимости от юрисдикции. Пожалуйста, ознакомьтесь с местным законодательством, прежде чем делать ставки.'
+
+  # SEO and betting-specific parameters
+  [params.seo]
+    default_image = '/images/betting-uae-og.jpg'
+    twitter_card = 'summary_large_image'
+    
+  [params.betting]
+    focus_region = 'UAE'
+    main_sports = ['Football', 'Cricket', 'Basketball', 'Tennis', 'Horse Racing']
+    popular_leagues = ['Premier League', 'Champions League', 'IPL', 'NBA', 'ATP']
+    
+  [params.features]
+    live_streaming = true
+    mobile_apps = true
+    crypto_payments = true
+    live_chat_support = true
+
+[permalinks]
+  betting-sites = "/:slug/"

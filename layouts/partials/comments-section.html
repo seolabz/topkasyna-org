@@ -1,0 +1,164 @@
+{{- $commentsData := .Site.Data.comments -}}
+{{- $pageLang := default .Site.Language.Lang .Page.Language.Lang -}}
+{{- $casinoSlug := "" -}}
+{{- $casinoLabel := default .Title .Params.casino_name -}}
+{{- with .Params.casino_name }}
+  {{- $casinoSlug = urlize . -}}
+{{- end }}
+{{- if and $commentsData $casinoSlug -}}
+  {{- $langComments := index $commentsData $pageLang -}}
+  {{- if not $langComments }}
+    {{- $langComments = index $commentsData "default" -}}
+  {{- end }}
+  {{- if not $langComments }}
+    {{- $langComments = index $commentsData "pl" -}}
+  {{- end }}
+  {{- if $langComments }}
+    {{- $filtered := where $langComments "casino" $casinoSlug -}}
+    {{- $formID := printf "comment-form-%s" (md5 .Permalink) -}}
+    {{- $commentCount := len $filtered -}}
+    {{- $pageDate := .PublishDate -}}
+    {{- if not $pageDate -}}
+      {{- $pageDate = .Date -}}
+    {{- end -}}
+    {{- $pageDateISO := "" -}}
+    {{- with $pageDate -}}
+      {{- $pageDateISO = (time .).Format "2006-01-02T15:04:05-07:00" -}}
+    {{- end -}}
+    {{- $pageModifiedISO := "" -}}
+    {{- with .Lastmod -}}
+      {{- $pageModifiedISO = (time .).Format "2006-01-02T15:04:05-07:00" -}}
+    {{- end -}}
+    {{- $pageText := "" -}}
+    {{- with .Summary -}}
+      {{- $pageText = (plainify .) | truncate 300 -}}
+    {{- else -}}
+      {{- $pageText = (plainify .Content) | truncate 300 -}}
+    {{- end -}}
+    {{- $commentsHeading := i18n "commentsTitle" (dict "Casino" $casinoLabel) -}}
+<section id="casino-comments" class="casino-comments" data-casino="{{ $casinoSlug }}" itemscope itemtype="https://schema.org/DiscussionForumPosting">
+  <meta itemprop="about" content="{{ $casinoLabel }}">
+  <meta itemprop="url" content="{{ .Permalink | absURL }}">
+  <meta itemprop="commentCount" content="{{ $commentCount }}">
+  {{- if $pageDateISO }}
+  <meta itemprop="datePublished" content="{{ $pageDateISO }}">
+  {{- end }}
+  {{- if $pageModifiedISO }}
+  <meta itemprop="dateModified" content="{{ $pageModifiedISO }}">
+  {{- end }}
+  {{- if $pageText }}
+  <meta itemprop="text" content="{{ $pageText }}">
+  {{- end }}
+  <div itemprop="author" itemscope itemtype="https://schema.org/Organization" class="visually-hidden">
+    <meta itemprop="name" content="{{ .Site.Title }}">
+    <meta itemprop="url" content="{{ .Site.BaseURL | absURL }}">
+  </div>
+
+  <div class="casino-comments__inner">
+    <header class="casino-comments__header">
+      <p class="eyebrow">{{ i18n "commentsEyebrow" }}</p>
+      <h2 itemprop="headline">{{ $commentsHeading }}</h2>
+      <p class="lead">
+        {{- if eq $commentCount 1 -}}
+          {{ i18n "commentsLeadSingle" }}
+        {{- else if gt $commentCount 1 -}}
+          {{ i18n "commentsLeadPlural" (dict "Count" $commentCount) }}
+        {{- else -}}
+          {{ i18n "commentsLeadEmpty" }}
+        {{- end -}}
+      </p>
+    </header>
+
+    {{- if gt $commentCount 0 }}
+    <div class="casino-comments__list">
+      {{- range $index, $comment := $filtered }}
+        {{- $commentNumber := add $index 1 -}}
+        {{- $commentID := printf "comment-%02d" $commentNumber -}}
+        {{- $commentURL := printf "%s#%s" $.Permalink $commentID -}}
+        {{- $commentAbsURL := $commentURL | absURL -}}
+        {{- $dateFormatted := "" -}}
+        {{- $dateISO := "" -}}
+        {{- $timeClock := "" -}}
+        {{- $dateTimeISO := "" -}}
+        {{- $dateDisplay := "" -}}
+        {{- with $comment.date -}}
+          {{- $parsed := time . -}}
+          {{- $dateFormatted = $parsed.Format "02.01.2006" -}}
+          {{- $dateISO = $parsed.Format "2006-01-02" -}}
+          {{- $authorLength := len $comment.author -}}
+          {{- $contentLength := len (plainify $comment.content) -}}
+          {{- $hourSeed := add $authorLength $contentLength $commentNumber -}}
+          {{- $minuteSeed := add (mul $contentLength 7) $commentNumber -}}
+          {{- $hour := mod $hourSeed 24 -}}
+          {{- $minute := mod $minuteSeed 60 -}}
+          {{- $timeClock = printf "%02d:%02d" $hour $minute -}}
+          {{- $dateTimeISO = printf "%sT%s:00Z" $dateISO $timeClock -}}
+          {{- $dateDisplay = printf "%s %s" $dateFormatted $timeClock -}}
+        {{- end -}}
+        <article id="{{ $commentID }}" class="casino-comment" itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+          <meta itemprop="url" content="{{ $commentAbsURL }}">
+          <div class="casino-comment__meta">
+            <div class="casino-comment__author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+              <span itemprop="name">{{ $comment.author }}</span>
+              <meta itemprop="url" content="{{ $commentAbsURL }}">
+              {{- with $comment.casino_url }}
+              <a href="{{ . | safeURL }}" class="casino-comment__cta" rel="nofollow noopener">{{ i18n "commentsPlayCta" (dict "Casino" $casinoLabel) }}</a>
+              {{- end }}
+            </div>
+            {{- if $dateDisplay }}
+            <div class="casino-comment__timestamp">
+              <time itemprop="datePublished"{{ if $dateTimeISO }} datetime="{{ $dateTimeISO }}"{{ end }}>{{ $dateDisplay }}</time>
+              {{- if $dateTimeISO }}
+              <meta itemprop="dateModified" content="{{ $dateTimeISO }}">
+              {{- end }}
+            </div>
+            {{- end }}
+          </div>
+          <p class="casino-comment__text" itemprop="text">{{ $comment.content }}</p>
+        </article>
+      {{- end }}
+    </div>
+    {{- else }}
+    <p class="casino-comments__empty">
+      {{ i18n "commentsEmpty" (dict "Casino" $casinoLabel) }}
+    </p>
+    {{- end }}
+
+    <div class="casino-comments__form" id="add-comment">
+      <h3>{{ i18n "commentsFormHeading" }}</h3>
+      <p class="form-lead">
+        {{ i18n "commentsFormLead" (dict "Casino" $casinoLabel) }}
+      </p>
+      <form id="{{ $formID }}" class="comment-form" novalidate>
+        <input type="hidden" name="casino" value="{{ $casinoSlug }}">
+        <label class="form-field">
+          <span>{{ i18n "commentsFieldNickname" }}</span>
+          <input type="text" name="nickname" placeholder="{{ i18n "commentsFieldNicknamePlaceholder" }}" required>
+        </label>
+        <label class="form-field">
+          <span>{{ i18n "commentsFieldExperience" }}</span>
+          <textarea name="comment" rows="4" placeholder="{{ i18n "commentsFieldExperiencePlaceholder" }}" required></textarea>
+        </label>
+        <button type="submit" class="comment-submit">{{ i18n "commentsSubmit" }}</button>
+        <p class="comment-status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('{{ $formID }}');
+  if (!form) return;
+  const statusNode = form.querySelector('.comment-status');
+  const successText = {{ i18n "commentsStatus" | jsonify }};
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    if (statusNode) {
+      statusNode.textContent = successText;
+    }
+    form.reset();
+  });
+});
+</script>
+  {{- end }}
+{{- end }}
