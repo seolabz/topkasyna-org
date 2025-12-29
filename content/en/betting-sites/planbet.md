@@ -26,7 +26,7 @@ canonical: "https://socialmediacontent.pl/planbet/"
 
 banner_image: "/images/banner.webp"
 date: 2025-12-23
-lastmod: 2025-12-23
+lastmod: 2025-12-29
 draft: false
 layout: "single"
 
