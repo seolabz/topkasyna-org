@@ -22,7 +22,7 @@ license: "Комиссия по регулированию азартных иг
 category: "Sports Betting & Online Casino"  
 
 # SEO i meta  
-canonical: "https://socialmediacontent.pl/azurslot/"  
+canonical: "https://topkasyna.org/azurslot/"  
 
 banner_image: "/images/banner.webp"
 date: 2025-12-23
