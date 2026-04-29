@@ -22,7 +22,7 @@ license: "Кюрасао eGaming №8048/JAZ"
 category: "Казино и спортивные ставки"
 
 # SEO i meta  
-canonical: "https://socialmediacontent.pl/planbet/"  
+canonical: "https://topkasyna.org/planbet/"  
 
 banner_image: "/images/banner.webp"
 date: 2025-12-23
