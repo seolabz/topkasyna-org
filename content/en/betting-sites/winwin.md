@@ -22,7 +22,7 @@ license: "International Gaming License (e.g., Curaçao)"
 category: "Sports Betting & Online Casino"  
 
 # SEO canonical  
-canonical: "https://socialmediacontent.pl/winwin/"  
+canonical: "https://topkasyna.org/winwin/"  
 
 banner_image: "/images/banner.webp"
 date: 2025-12-23
