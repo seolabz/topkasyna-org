@@ -22,7 +22,7 @@ license: "Anjouan Gaming №ALSI-152406028-FI2"
 category: "Sports Betting & Online Casino"  
 
 # SEO i meta  
-canonical: "https://socialmediacontent.pl/stonevegas/"  
+canonical: "https://topkasyna.org/stonevegas/"  
 
 banner_image: "/images/banner.webp"
 date: 2025-12-23
