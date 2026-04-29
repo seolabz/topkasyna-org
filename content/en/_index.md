@@ -10,7 +10,7 @@ date: 2025-12-23
 lastmod: 2025-12-29
 draft: false
 layout: "index"
-canonical: "https://socialmediacontent.pl/"
+canonical: "https://topkasyna.org/"
 ---
 
 
