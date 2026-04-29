@@ -22,7 +22,7 @@ license: "КюрасаО №8048/JAZ2016-050"
 category: "Sports Betting & Online Casino"  
 
 # SEO canonical  
-canonical: "https://socialmediacontent.pl/starda/"  
+canonical: "https://topkasyna.org/starda/"  
 banner_image: "/images/banner.webp"
 date: 2025-12-23
 lastmod: 2025-12-29
