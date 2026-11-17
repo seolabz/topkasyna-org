@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fakeUrl: "#stonevegas"
       },
        "winwin": {
-        partnerUrl: "https://refpa712080.pro/L?tag=d_4921276m_64485c_&site=4921276&ad=64485",
+        partnerUrl: "https://refpa34683.com/L?tag=d_4973364m_64485c_&site=4973364&ad=64485",
         fakeUrl: "#winwin"
       },
        "starda": {
